@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import mapboxgl from 'mapbox-gl';
 
 const Path = ({ map, phone }) => {
+    const calculateRoute = async(path)=>{
+        
+    }
     useEffect(() => {
         console.log(phone);
         const originMarker = new mapboxgl.Marker({
