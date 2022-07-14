@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 const Map = () => {
     // eslint-disable-next-line no-undef
     useEffect(() => {
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYXNoaWZhbGkiLCJhIjoiY2w1amFnNXpiMDByaDNjcGY2OWdlZjV1aSJ9.K6DLXl1Jtbufpb0IIV0Y6g';
+        mapboxgl.accessToken = process.env.REACT_APP_BOX_API_KEY;
         const map = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/streets-v11', // style URL
