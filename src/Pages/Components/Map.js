@@ -1,11 +1,11 @@
 import mapboxgl from 'mapbox-gl';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Map = () => {
-    // eslint-disable-next-line no-undef
+    const [map, setMap] = useState(null);
     useEffect(() => {
         mapboxgl.accessToken = process.env.REACT_APP_BOX_API_KEY;
-        const map = new mapboxgl.Map({
+        const mapBox = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/streets-v11', // style URL
             center: [-74.5, 40], // starting position [lng, lat]
@@ -17,13 +17,14 @@ const Map = () => {
             color: "green",
             draggable: true
         }).setLngLat([-74.5, 40])
-            .addTo(map);
+            .addTo(mapBox);
 
         console.log(marker, 'marker');
-        map.setStyle('mapbox://styles/ashifali/cl5jdjuq5007414nvo412eb6r');
-        map.on('style.load', () => {
-            map.setFog({}); // Set the default atmosphere style
+        mapBox.setStyle('mapbox://styles/ashifali/cl5jdjuq5007414nvo412eb6r');
+        mapBox.on('style.load', () => {
+            mapBox.setFog({}); // Set the default atmosphere style
             // Set marker options.
+            setMap(mapBox);
 
         });
     }, [])
@@ -36,6 +37,7 @@ const Map = () => {
                     width: '100%',
                     height: '100%',
                 }}>
+                {map && <></>}
             </div>
         </>
     )
