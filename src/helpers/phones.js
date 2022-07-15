@@ -5,7 +5,7 @@ const data = [
         name: 'UE1',
         id: '1',
         speed: 5,
-        mode: 'WALKING',
+        mode: 'driving',
     },
     {
         origin: [-73.699612, 40.660913],
@@ -13,7 +13,7 @@ const data = [
         name: 'UE2',
         id: '2',
         speed: 50,
-        mode: 'DRIVING',
+        mode: 'walking',
     },
     {
         origin: [-74.235472, 40.858660],
@@ -21,8 +21,24 @@ const data = [
         name: 'UE3',
         id: '3',
         speed: 40,
-        mode: 'DRIVING',
-    }
+        mode: 'walking',
+    },
+    {
+        origin: [-75.698421,45.574960],
+        destination: [-80.938140, 47.471425],
+        name: 'UE4',
+        id: '4',
+        speed: 40,
+        mode: 'driving',
+    },
+    {
+        origin: [-75.698421,45.574960],
+        destination: [-74.397257, 41.118245],
+        name: 'UE5',
+        id: '5',
+        speed: 40,
+        mode: 'Walking',
+    },
 ];
 
 export default data;
