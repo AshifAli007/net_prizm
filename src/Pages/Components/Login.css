@@ -1,0 +1,145 @@
+body {
+	background: #fff;
+	margin: 0px;
+	padding: 0px;
+	font-family: 'Roboto';
+	font-size: 12px;
+}
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+.login-bg {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	color: #565656;
+}
+
+.login-left {
+	float: left;
+	width: 26%;
+	margin: 5% 15% 0px 1%;
+}
+
+.login-logo {
+	text-align: center;
+}
+
+.login-left h1 {
+	text-align: center;
+	color: #000;
+	font-weight: 700;
+	font-size: 32px;
+	line-height: 34px;
+}
+
+.login-left p {
+	text-align: center;
+	color: #565656;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 15px;
+	margin-top: 10px;
+}
+
+.login-form {
+	padding: 40px;
+	border: 1px solid #EBE5E5;
+	box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.16);
+	border-radius: 0px;
+	margin-top: 20px;
+}
+
+.login-form h3 {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 600;
+	font-size: 22px;
+	line-height: 26px;
+	color: #000;
+	margin-bottom: 25px;
+
+}
+
+.login-form input[type="text"] {
+	width: 92%;
+	border: none;
+	border-bottom: 1px solid #ccc;
+	height: 30px;
+	margin-bottom: 30px;
+	padding-left: 8%;
+	font-size: 12px;
+}
+.login-form input[type="password"] {
+	width: 92%;
+	border: none;
+	border-bottom: 1px solid #ccc;
+	padding-left: 8%;
+	font-size: 12px;
+}
+.login-form input[type="text"]:focus {
+	border: none;
+}
+.forget-password a {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 14px;
+	color: #D52B1E;
+	text-decoration: none;
+	float: right;
+	margin-top: -20px;
+}
+
+.login-button {
+	padding: 6px;
+	background: #D52B1E;
+	text-align: center;
+	font-size: 16px;
+	border-radius: 25px;
+	margin-top: 20px;
+}
+
+.login-button a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.login-form-pera p {
+	border-top: 1px solid #ECE7E7;
+	margin-top: 20px;
+	padding-top: 20px;
+	text-align: center;
+}
+
+.login-right {
+	float: right;
+	margin-top: 50px;
+}
+
+.login-right img{
+	width: 90%;
+	max-width: 100%;
+}
+.css-i4bv87-MuiSvgIcon-root {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	width: 1em;
+	height: 1em;
+	display: inline-block;
+	fill: currentColor;
+	-webkit-flex-shrink: 0;
+	-ms-flex-negative: 0;
+	flex-shrink: 0;
+	-webkit-transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+	transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+	/* font-size: -4.5rem; */
+	font-size: 13px;
+}
