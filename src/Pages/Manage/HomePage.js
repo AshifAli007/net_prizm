@@ -2,6 +2,7 @@ import React from 'react';
 import SideBar from '../Components/SideBar';
 import { Layout, Menu } from 'antd';
 import Map from '../Components/Map';
+
 import {
     SearchOutlined,
     BookOutlined,
@@ -71,6 +72,7 @@ const HomePage = () => {
                         }}
                     >
                         {<Map />}
+                        
 
                     </div>
                 </Content>

@@ -1,0 +1,56 @@
+.right-sidebar{
+    float:right;
+    background:rgb(202, 200, 200);
+    top: 0px;
+    z-index: 1;
+    position: absolute;
+    right: 0px;
+}
+.right-sidebar ul{
+    list-style-type:none;
+}
+.right-sidebar ul li{
+    padding:3px;
+    border-bottom:1px solid rgb(165, 163, 163);
+}
+.right-sidebar ul li a i{ 
+    color:#222;
+}
+.tooltip {
+    position: relative;
+    display: flex;
+    border-bottom: 1px dotted black;
+  } 
+  .tooltip .tooltiptext {
+    visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 150%;
+  opacity: 0.7;
+  }
+
+
+.tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 100%; 
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent black;
+  }
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+  span{
+    margin-top: 5px;
+}

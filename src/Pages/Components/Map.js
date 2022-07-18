@@ -1,5 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
+import DragDrop from './DragDrop';
+import ToolBar from "../Components/ToolBar";
 
 const Map = () => {
     const [map, setMap] = useState(null);
@@ -37,7 +39,8 @@ const Map = () => {
                     width: '100%',
                     height: '100%',
                 }}>
-                {map && <></>}
+                {map && <DragDrop map={map}/>}
+                {<ToolBar />}
             </div>
         </>
     )
