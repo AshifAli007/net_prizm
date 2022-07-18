@@ -21,74 +21,7 @@ const Path = ({ map, phone }) => {
 
         // Washington DC
         destination = [-77.032, 38.913];
-        const geojson = {
-            'type': 'FeatureCollection',
-            'features': [
-                {
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': []
-                    }
-                }
-            ]
-        };
 
-        const speedFactor = 10; // number of frames per longitude degree
-        let animation; // to store and cancel the animation
-        let startTime = 0;
-        let resetTime = false; 
-        let progress = 0; // progress = timestamp - startTime
-        map.addSource(`animated_line${phone.id}`, {
-            'type': 'geojson',
-            'data': geojson
-        });
-
-        // add the line which will be modified in the animation
-        map.addLayer({
-            'id': `animated_line${phone.id}`,
-            'type': 'line',
-            'source': `animated_line${phone.id}`,
-            'layout': {
-                'line-cap': 'round',
-                'line-join': 'round'
-            },
-            'paint': {
-                'line-color': '#ed6498',
-                'line-width': 10,
-                'line-opacity': 0.8
-            }
-        });
-
-        startTime = performance.now();
-
-        animateLine();
-        function animateLine(timestamp) {
-
-            if (resetTime) {
-                // resume previous progress
-                startTime = performance.now() - progress;
-                resetTime = false;
-            } else {
-                i++;
-                progress = timestamp - startTime;
-            }
-
-
-
-
-            if (i> lineCoordinates.length -1) {
-                i=0;
-                startTime = timestamp;
-                geojson.features[0].geometry.coordinates = [];
-            } else {
-                geojson.features[0].geometry.coordinates.push(lineCoordinates[i]);
-                // then update the map
-                map.getSource(`animated_line${phone.id}`).setData(geojson);
-            }
-            // Request the next frame of the animation.
-            animation = requestAnimationFrame(animateLine);
-        }
         const route = {
             'type': 'FeatureCollection',
             'features': [
@@ -242,6 +175,80 @@ const Path = ({ map, phone }) => {
         //         i++;
         //     }
         // }, 1000);
+        const geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': []
+                    }
+                }
+            ]
+        };
+
+        const speedFactor = 2000; // number of frames per longitude degree
+        let animation; // to store and cancel the animation
+        let startTime = 0;
+        let resetTime = false;
+        let progress = 0; // progress = timestamp - startTime
+        map.addSource(`animated_line${phone.id}`, {
+            'type': 'geojson',
+            'data': geojson
+        });
+
+        // add the line which will be modified in the animation
+        map.addLayer({
+            'id': `animated_line${phone.id}`,
+            'type': 'line',
+            'source': `animated_line${phone.id}`,
+            'layout': {
+                'line-cap': 'round',
+                'line-join': 'round'
+            },
+            'paint': {
+                'line-color': '#ed6498',
+                'line-width': 10,
+                'line-opacity': 0.8
+            },
+            
+        });
+
+        startTime = performance.now();
+
+        animateLine();
+        function animateLine(timestamp) {
+            if (resetTime) {
+                // resume previous progress
+                startTime = performance.now() - progress;
+                resetTime = false;
+            } else {
+                progress = timestamp - startTime;
+            }
+            // console.log(progress, speedFactor);
+            // restart if it finishes a loop
+            if (progress > speedFactor * 360) {
+                console.log('inside progess');
+                startTime = timestamp;
+                geojson.features[0].geometry.coordinates = [];
+            } else {
+                const x = progress / speedFactor;
+                // draw a sine wave with some math.
+                const y = Math.sin((x * Math.PI) / 90) * 40;
+                // append new coordinates to the lineString
+                if (i < lineCoordinates.length - 1) {
+                    geojson.features[0].geometry.coordinates.push(lineCoordinates[i++]);
+                } else {
+                    i = 0;
+                    geojson.features[0].geometry.coordinates = [];
+                }
+                // then update the map
+                map.getSource(`animated_line${phone.id}`).setData(geojson);
+            }
+            // Request the next frame of the animation.
+            animation = requestAnimationFrame(animateLine);
+        }
     }
     const addModel = () => {
         const modelOrigin = [-74.046063, 40.721909];
