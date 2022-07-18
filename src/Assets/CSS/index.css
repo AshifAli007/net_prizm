@@ -1,0 +1,8 @@
+.car {
+    background-image: url('../../Assets/car.png');
+    background-size: cover;
+    width: 17px;
+    height: 35px;
+    /* border-radius: ; */
+    cursor: pointer;
+  }
