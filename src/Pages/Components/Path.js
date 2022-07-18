@@ -5,7 +5,7 @@ import * as turf from '@turf/turf';
 import carImage from '../../Assets/car.png';
 import phoneImage from '../../Assets/phone.png';
 import * as THREE from 'three';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const Path = ({ map, phone }) => {
     const calculateRoute = async () => {
@@ -84,6 +84,7 @@ const Path = ({ map, phone }) => {
         );
         map.addSource(`route${phone.id}`, {
             'type': 'geojson',
+            'lineMetrics': true,
             'data': route
         });
 
@@ -102,7 +103,16 @@ const Path = ({ map, phone }) => {
             },
             'paint': {
                 'line-color': `rgb(${Math.random() * 100 + 50},${Math.random() * 100 + 50},${Math.random() * 100 + 50})`,
-                'line-width': 5
+                'line-width': 5,
+                'line-gradient': [
+                    'interpolate',
+                    ['linear'],
+                    ['line-progress'],
+                    0,
+                    'pink',
+                    0.5,
+                    'grey'
+                ]
             }
         });
         map.addLayer({
@@ -266,7 +276,7 @@ const Path = ({ map, phone }) => {
                 this.renderer.resetState();
                 this.renderer.render(this.scene, this.camera);
                 this.map.triggerRepaint();
-                console.log('running');
+
             }
         };
         map.on('style.load', () => {
