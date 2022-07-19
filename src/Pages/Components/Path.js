@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const Path = ({ map, phone }) => {
-    let [i, setI] = useState(0);
+    
     const calculateRoute = async () => {
         let origin = `${phone.origin[0]},${phone.origin[1]}`;
         let destination = `${phone.destination[0]},${phone.destination[1]}`;
@@ -47,6 +47,28 @@ const Path = ({ map, phone }) => {
                 }
             ]
         };
+        const geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': []
+                    }
+                }
+            ]
+        };
+
+        map.addSource(`animated_line${phone.id}`, {
+            'type': 'geojson',
+            'data': geojson
+        });
+
+        // add the line which will be modified in the animation
+
+
+
 
         let iconToUse = phone.mode === 'walking' ? 'phone1' : 'car1';
         let sizeToUse = phone.mode === 'walking' ? 1 : 0.07;
@@ -104,7 +126,7 @@ const Path = ({ map, phone }) => {
                 'line-cap': 'round'
             },
             'paint': {
-                'line-color': `rgb(${Math.random() * 100 + 50},${Math.random() * 100 + 50},${Math.random() * 100 + 50})`,
+                'line-color': `rgb(${Math.random() * 200 + 50},${Math.random() * 200 + 50},${Math.random() * 200 + 50})`,
                 'line-width': 5
             }
         });
@@ -126,7 +148,23 @@ const Path = ({ map, phone }) => {
                 'icon-ignore-placement': true
             }
         });
+        map.addLayer({
+            'id': `animated_line${phone.id}`,
+            'type': 'line',
+            'source': `animated_line${phone.id}`,
+            'layout': {
+                'line-cap': 'round',
+                'line-join': 'round'
+            },
+            'paint': {
+                'line-color': 'grey',
+                'line-width': 8,
+                'line-opacity': 0.8
+            },
+
+        });
         function animate() {
+
             const start =
                 route.features[0].geometry.coordinates[
                 counter >= steps ? counter - 1 : counter
@@ -142,6 +180,11 @@ const Path = ({ map, phone }) => {
             point.features[0].geometry.coordinates =
                 route.features[0].geometry.coordinates[counter];
 
+            // if (counter < lineCoordinates.length - 1) {
+
+            geojson.features[0].geometry.coordinates.push(route.features[0].geometry.coordinates[counter]);
+            // }
+
             // Calculate the bearing to ensure the icon is rotated to match the route arc
             // The bearing is calculated between the current point and the next point, except
             // at the end of the arc, which uses the previous point and the current point
@@ -152,6 +195,8 @@ const Path = ({ map, phone }) => {
 
             // Update the source with this new data
             map.getSource(`point${phone.id}`).setData(point);
+            console.log('added point');
+            map.getSource(`animated_line${phone.id}`).setData(geojson);
 
             // Request the next frame of animation as long as the end has not been reached
             if (counter < steps) {
@@ -161,94 +206,7 @@ const Path = ({ map, phone }) => {
             counter = counter + 1;
         }
         animate(counter);
-        // let i = 0;
-        // let interval = setInterval(() => {
-        //     console.log('hii there', lineCoordinates);
-        //     if (i < lineCoordinates.length) {
-        //         // let obj = {
-        //         //     lat: lineCoordinates[i][],
-        //         //     lng: lineCoordinates[i],
-        //         // }
-        //         ue.setLngLat([...lineCoordinates[i]]);
-        //         console.log(lineCoordinates[i], 'linesss');
-        //         // setCurrentLocation(obj);
-        //         i++;
-        //     }
-        // }, 1000);
-        const geojson = {
-            'type': 'FeatureCollection',
-            'features': [
-                {
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': []
-                    }
-                }
-            ]
-        };
 
-        const speedFactor = 2000; // number of frames per longitude degree
-        let animation; // to store and cancel the animation
-        let startTime = 0;
-        let resetTime = false;
-        let progress = 0; // progress = timestamp - startTime
-        map.addSource(`animated_line${phone.id}`, {
-            'type': 'geojson',
-            'data': geojson
-        });
-
-        // add the line which will be modified in the animation
-        map.addLayer({
-            'id': `animated_line${phone.id}`,
-            'type': 'line',
-            'source': `animated_line${phone.id}`,
-            'layout': {
-                'line-cap': 'round',
-                'line-join': 'round'
-            },
-            'paint': {
-                'line-color': '#ed6498',
-                'line-width': 10,
-                'line-opacity': 0.8
-            },
-            
-        });
-
-        startTime = performance.now();
-
-        animateLine();
-        function animateLine(timestamp) {
-            if (resetTime) {
-                // resume previous progress
-                startTime = performance.now() - progress;
-                resetTime = false;
-            } else {
-                progress = timestamp - startTime;
-            }
-            // console.log(progress, speedFactor);
-            // restart if it finishes a loop
-            if (progress > speedFactor * 360) {
-                console.log('inside progess');
-                startTime = timestamp;
-                geojson.features[0].geometry.coordinates = [];
-            } else {
-                const x = progress / speedFactor;
-                // draw a sine wave with some math.
-                const y = Math.sin((x * Math.PI) / 90) * 40;
-                // append new coordinates to the lineString
-                if (i < lineCoordinates.length - 1) {
-                    geojson.features[0].geometry.coordinates.push(lineCoordinates[i++]);
-                } else {
-                    i = 0;
-                    geojson.features[0].geometry.coordinates = [];
-                }
-                // then update the map
-                map.getSource(`animated_line${phone.id}`).setData(geojson);
-            }
-            // Request the next frame of the animation.
-            animation = requestAnimationFrame(animateLine);
-        }
     }
     const addModel = () => {
         const modelOrigin = [-74.046063, 40.721909];
