@@ -1,5 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
+import ToolBar from './ToolBar';
 import phones from '../../helpers/phones';
 import Path from '../Components/Path.js';
 
@@ -38,6 +39,7 @@ const Map = () => {
                     width: '100%',
                     height: '100%',
                 }}>
+                    <ToolBar></ToolBar>
                 {map &&
                     phones.map((phone) => {
                         return (
