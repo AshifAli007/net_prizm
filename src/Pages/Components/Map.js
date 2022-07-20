@@ -1,5 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import { useEffect } from 'react';
+import ToolBar from './ToolBar';
 
 const Map = () => {
     // eslint-disable-next-line no-undef
@@ -36,6 +37,7 @@ const Map = () => {
                     width: '100%',
                     height: '100%',
                 }}>
+                    <ToolBar></ToolBar>
             </div>
         </>
     )
