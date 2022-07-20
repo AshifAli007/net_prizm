@@ -35,10 +35,8 @@ const Path = ({ map, phone }) => {
                 'line-width': 5
             }
         });
-        console.log(lineCoordinates);
     }
     useEffect(() => {
-        console.log(phone);
         const originMarker = new mapboxgl.Marker({
             color: "green",
             draggable: true

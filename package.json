@@ -13,6 +13,10 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "source-map-loader": "^4.0.0",
+    "three": "^0.142.0",
+    "three-gltf-loader": "^1.111.0",
+    "threebox-plugin": "^2.2.7",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
