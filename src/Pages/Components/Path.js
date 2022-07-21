@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import mapboxgl from 'mapbox-gl';
 import axios from "axios";
 import * as turf from '@turf/turf';
@@ -8,6 +8,9 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const Path = ({ map, phone }) => {
+    const [currentLatLng, setCurrentLatLng] = useState(phone.origin);
+    const ue_popup = new mapboxgl.Popup();
+
     const calculateRoute = async () => {
         let origin = `${phone.origin[0]},${phone.origin[1]}`;
         let destination = `${phone.destination[0]},${phone.destination[1]}`;
@@ -20,6 +23,7 @@ const Path = ({ map, phone }) => {
 
         // Washington DC
         destination = [-77.032, 38.913];
+
         const route = {
             'type': 'FeatureCollection',
             'features': [
@@ -37,7 +41,22 @@ const Path = ({ map, phone }) => {
             'features': [
                 {
                     'type': 'Feature',
-                    'properties': {},
+                    'properties': {
+                        'description':
+                            `<strong>UE Details</strong><br/>
+                            UE ID: ${phone.id}<br />
+                            Current Speed: ${phone.speed}<br/>
+                            Current Location: ${currentLatLng} -hii<br/>
+                            Mode: ${phone.mode}<br />
+                            Origin: ${phone.origin}<br />
+                            Destination: ${phone.destination}<br />
+                            
+
+                            
+                            `,
+                        'icon': 'theatre-15',
+                        'currentLatLng': currentLatLng,
+                    },
                     'geometry': {
                         'type': 'Point',
                         'coordinates': origin
@@ -45,6 +64,27 @@ const Path = ({ map, phone }) => {
                 }
             ]
         };
+        const geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': []
+                    }
+                }
+            ]
+        };
+
+        map.addSource(`animated_line${phone.id}`, {
+            'type': 'geojson',
+            'data': geojson
+        });
+
+        // add the line which will be modified in the animation
+
+
 
         let iconToUse = phone.mode === 'walking' ? 'phone1' : 'car1';
         let sizeToUse = phone.mode === 'walking' ? 1 : 0.07;
@@ -102,17 +142,8 @@ const Path = ({ map, phone }) => {
                 'line-cap': 'round'
             },
             'paint': {
-                'line-color': `rgb(${Math.random() * 100 + 50},${Math.random() * 100 + 50},${Math.random() * 100 + 50})`,
-                'line-width': 5,
-                'line-gradient': [
-                    'interpolate',
-                    ['linear'],
-                    ['line-progress'],
-                    0,
-                    'pink',
-                    0.5,
-                    'grey'
-                ]
+                'line-color': `rgb(${Math.random() * 200 + 50},${Math.random() * 200 + 50},${Math.random() * 200 + 50})`,
+                'line-width': 5
             }
         });
         map.addLayer({
@@ -133,7 +164,41 @@ const Path = ({ map, phone }) => {
                 'icon-ignore-placement': true
             }
         });
+        map.on('click', `point${phone.id}`, (e) => {
+            // Copy coordinates array.
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const description = e.features[0].properties.currentLatLng;
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            
+            ue_popup
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+        });
+
+        map.addLayer({
+            'id': `animated_line${phone.id}`,
+            'type': 'line',
+            'source': `animated_line${phone.id}`,
+            'layout': {
+                'line-cap': 'round',
+                'line-join': 'round'
+            },
+            'paint': {
+                'line-color': 'grey',
+                'line-width': 5,
+                'line-opacity': 0.8
+            },
+
+        });
         function animate() {
+
             const start =
                 route.features[0].geometry.coordinates[
                 counter >= steps ? counter - 1 : counter
@@ -149,6 +214,13 @@ const Path = ({ map, phone }) => {
             point.features[0].geometry.coordinates =
                 route.features[0].geometry.coordinates[counter];
 
+            // if (counter < lineCoordinates.length - 1) {
+
+            geojson.features[0].geometry.coordinates.push(route.features[0].geometry.coordinates[counter]);
+            // setCurrentLatLng(route.features[0].geometry.coordinates[counter]);
+            console.log(route.features[0].geometry.coordinates[counter]);
+            // }
+
             // Calculate the bearing to ensure the icon is rotated to match the route arc
             // The bearing is calculated between the current point and the next point, except
             // at the end of the arc, which uses the previous point and the current point
@@ -156,9 +228,12 @@ const Path = ({ map, phone }) => {
                 turf.point(start),
                 turf.point(end)
             );
-
+            point.features[0].properties.currentLatLng = route.features[0].geometry.coordinates[counter];
+            ue_popup.setHTML(point.features[0].properties.description + route.features[0].geometry.coordinates[counter]);
+            
             // Update the source with this new data
             map.getSource(`point${phone.id}`).setData(point);
+            map.getSource(`animated_line${phone.id}`).setData(geojson);
 
             // Request the next frame of animation as long as the end has not been reached
             if (counter < steps) {
@@ -168,20 +243,7 @@ const Path = ({ map, phone }) => {
             counter = counter + 1;
         }
         animate(counter);
-        // let i = 0;
-        // let interval = setInterval(() => {
-        //     console.log('hii there', lineCoordinates);
-        //     if (i < lineCoordinates.length) {
-        //         // let obj = {
-        //         //     lat: lineCoordinates[i][],
-        //         //     lng: lineCoordinates[i],
-        //         // }
-        //         ue.setLngLat([...lineCoordinates[i]]);
-        //         console.log(lineCoordinates[i], 'linesss');
-        //         // setCurrentLocation(obj);
-        //         i++;
-        //     }
-        // }, 1000);
+
     }
     const addModel = () => {
         const modelOrigin = [-74.046063, 40.721909];
@@ -285,18 +347,39 @@ const Path = ({ map, phone }) => {
 
     }
     useEffect(() => {
-        console.log(phone);
+        const originPopup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        }).setHTML(`UE ID: ${phone.id} <br/> Location: ${phone.origin}`);
+        const destinationPopup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        }).setHTML(`UE ID: ${phone.id} <br/> Location: ${phone.destination}`);
+
         const originMarker = new mapboxgl.Marker({
             color: "green",
         }).setLngLat([...phone.origin])
+            .setPopup(originPopup)
             .addTo(map);
 
         const destinationMarker = new mapboxgl.Marker({
             color: "red",
         }).setLngLat([...phone.destination])
+            .setPopup(destinationPopup)
             .addTo(map);
+
+        const originDiv = originMarker.getElement();
+        originDiv.addEventListener('mouseenter', () => originMarker.togglePopup());
+        originDiv.addEventListener('mouseleave', () => originMarker.togglePopup());
+
+        const destinationDiv = destinationMarker.getElement();
+        destinationDiv.addEventListener('mouseenter', () => destinationMarker.togglePopup());
+        destinationDiv.addEventListener('mouseleave', () => destinationMarker.togglePopup());
+
+
         const el = document.createElement('div');
         el.className = 'car';
+
 
         calculateRoute();
         addModel();

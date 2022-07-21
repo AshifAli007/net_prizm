@@ -1,21 +1,25 @@
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
-import DragDrop from './DragDrop';
-import ToolBar from "../Components/ToolBar";
+import ToolBar from './ToolBar';
 import phones from '../../helpers/phones';
 import Path from '../Components/Path.js';
 
 const Map = () => {
     const [map, setMap] = useState(null);
+    const v1 = new mapboxgl.LngLatBounds(
+        new mapboxgl.LngLat(-125.791110603, 10.91619),
+        new mapboxgl.LngLat(-70.96466, 60.3577635769)
+        );
     useEffect(() => {
         mapboxgl.accessToken = process.env.REACT_APP_BOX_API_KEY;
         const mapBox = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/streets-v11', // style URL
             center: [-74.002823, 40.712975], // starting position [lng, lat]
-            zoom: 9, // starting zoom
+            // zoom: 1, // starting zoom
             projection: 'globe', // display the map as a 3D globe
-            attributionControl: false
+            attributionControl: false,
+            maxBounds: v1,
         });
 
         mapBox.setStyle('mapbox://styles/ashifali/cl5jdjuq5007414nvo412eb6r');
@@ -35,8 +39,7 @@ const Map = () => {
                     width: '100%',
                     height: '100%',
                 }}>
-                {map && <DragDrop map={map}/>}
-                {<ToolBar />}
+                    <ToolBar></ToolBar>
                 {map &&
                     phones.map((phone) => {
                         return (
