@@ -1,30 +1,32 @@
 import mapboxgl from 'mapbox-gl';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ToolBar from './ToolBar';
+import phones from '../../helpers/phones';
+import Path from '../Components/Path.js';
 
 const Map = () => {
-    // eslint-disable-next-line no-undef
+    const [map, setMap] = useState(null);
+    const v1 = new mapboxgl.LngLatBounds(
+        new mapboxgl.LngLat(-125.791110603, 10.91619),
+        new mapboxgl.LngLat(-70.96466, 60.3577635769)
+        );
     useEffect(() => {
         mapboxgl.accessToken = process.env.REACT_APP_BOX_API_KEY;
-        const map = new mapboxgl.Map({
+        const mapBox = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/streets-v11', // style URL
-            center: [-74.5, 40], // starting position [lng, lat]
-            zoom: 9, // starting zoom
+            center: [-74.002823, 40.712975], // starting position [lng, lat]
+            // zoom: 1, // starting zoom
             projection: 'globe', // display the map as a 3D globe
-            attributionControl: false
+            attributionControl: false,
+            maxBounds: v1,
         });
-        const marker = new mapboxgl.Marker({
-            color: "green",
-            draggable: true
-        }).setLngLat([-74.5, 40])
-            .addTo(map);
 
-        console.log(marker, 'marker');
-        map.setStyle('mapbox://styles/ashifali/cl5jdjuq5007414nvo412eb6r');
-        map.on('style.load', () => {
-            map.setFog({}); // Set the default atmosphere style
+        mapBox.setStyle('mapbox://styles/ashifali/cl5jdjuq5007414nvo412eb6r');
+        mapBox.on('style.load', () => {
+            mapBox.setFog({}); // Set the default atmosphere style
             // Set marker options.
+            setMap(mapBox);
 
         });
     }, [])
@@ -38,6 +40,14 @@ const Map = () => {
                     height: '100%',
                 }}>
                     <ToolBar></ToolBar>
+                {map &&
+                    phones.map((phone) => {
+                        return (
+                            <Path phone={phone} map={map}/>
+                        )
+                    })
+            }
+
             </div>
         </>
     )
