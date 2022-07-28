@@ -20,6 +20,9 @@ const Path = ({ map, phone }) => {
         VideoConferencing: '30%'
     });
     
+    const [currentLatLng, setCurrentLatLng] = useState(phone.origin);
+    const ue_popup = new mapboxgl.Popup();
+
     const calculateRoute = async () => {
         let origin = `${phone.origin[0]},${phone.origin[1]}`;
         let destination = `${phone.destination[0]},${phone.destination[1]}`;
@@ -50,7 +53,22 @@ const Path = ({ map, phone }) => {
             'features': [
                 {
                     'type': 'Feature',
-                    'properties': {},
+                    'properties': {
+                        'description':
+                            `<strong>UE Details</strong><br/>
+                            UE ID: ${phone.id}<br />
+                            Current Speed: ${phone.speed}<br/>
+                            Current Location: ${currentLatLng} -hii<br/>
+                            Mode: ${phone.mode}<br />
+                            Origin: ${phone.origin}<br />
+                            Destination: ${phone.destination}<br />
+                            
+
+                            
+                            `,
+                        'icon': 'theatre-15',
+                        'currentLatLng': currentLatLng,
+                    },
                     'geometry': {
                         'type': 'Point',
                         'coordinates': origin
@@ -158,6 +176,24 @@ const Path = ({ map, phone }) => {
                 'icon-ignore-placement': true
             }
         });
+        map.on('click', `point${phone.id}`, (e) => {
+            // Copy coordinates array.
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const description = e.features[0].properties.currentLatLng;
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            
+            ue_popup
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+        });
+
         map.addLayer({
             'id': `animated_line${phone.id}`,
             'type': 'line',
@@ -168,7 +204,7 @@ const Path = ({ map, phone }) => {
             },
             'paint': {
                 'line-color': 'grey',
-                'line-width': 8,
+                'line-width': 5,
                 'line-opacity': 0.8
             },
 
@@ -193,6 +229,8 @@ const Path = ({ map, phone }) => {
             // if (counter < lineCoordinates.length - 1) {
 
             geojson.features[0].geometry.coordinates.push(route.features[0].geometry.coordinates[counter]);
+            // setCurrentLatLng(route.features[0].geometry.coordinates[counter]);
+            console.log(route.features[0].geometry.coordinates[counter]);
             // }
 
             // Calculate the bearing to ensure the icon is rotated to match the route arc
@@ -202,10 +240,11 @@ const Path = ({ map, phone }) => {
                 turf.point(start),
                 turf.point(end)
             );
-
+            point.features[0].properties.currentLatLng = route.features[0].geometry.coordinates[counter];
+            ue_popup.setHTML(point.features[0].properties.description + route.features[0].geometry.coordinates[counter]);
+            
             // Update the source with this new data
             map.getSource(`point${phone.id}`).setData(point);
-            console.log('added point');
             map.getSource(`animated_line${phone.id}`).setData(geojson);
 
             // Request the next frame of animation as long as the end has not been reached
@@ -521,18 +560,39 @@ const Path = ({ map, phone }) => {
 
     }
     useEffect(() => {
-        console.log(phone);
+        const originPopup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        }).setHTML(`UE ID: ${phone.id} <br/> Location: ${phone.origin}`);
+        const destinationPopup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        }).setHTML(`UE ID: ${phone.id} <br/> Location: ${phone.destination}`);
+
         const originMarker = new mapboxgl.Marker({
             color: "green",
         }).setLngLat([...phone.origin])
+            .setPopup(originPopup)
             .addTo(map);
 
         const destinationMarker = new mapboxgl.Marker({
             color: "red",
         }).setLngLat([...phone.destination])
+            .setPopup(destinationPopup)
             .addTo(map);
+
+        const originDiv = originMarker.getElement();
+        originDiv.addEventListener('mouseenter', () => originMarker.togglePopup());
+        originDiv.addEventListener('mouseleave', () => originMarker.togglePopup());
+
+        const destinationDiv = destinationMarker.getElement();
+        destinationDiv.addEventListener('mouseenter', () => destinationMarker.togglePopup());
+        destinationDiv.addEventListener('mouseleave', () => destinationMarker.togglePopup());
+
+
         const el = document.createElement('div');
         el.className = 'car';
+
 
         calculateRoute();
         addModel();
