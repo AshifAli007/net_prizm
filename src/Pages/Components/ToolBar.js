@@ -20,6 +20,7 @@ const ToolBar = () => {
                     }}
                 >
                     <div class="tooltip">
+    
                         <li>
                             <SearchIcon />
                         </li>
@@ -54,7 +55,7 @@ const ToolBar = () => {
                             <i class="fa fa-map-o" aria-hidden="true"></i>
                         </li>
                         <span class="tooltiptext">Map Switch</span>
-                    </div>
+                    </div> 
                     <div class="tooltip">
                         <li >
                             <i class="fa fa-arrows" aria-hidden="true"></i>
@@ -74,14 +75,14 @@ const ToolBar = () => {
                         <span class="tooltiptext">Rotate</span>
                     </div>
                     <div class="tooltip">
-                        <li>
-                            <CategoryOutlinedIcon />
+                        <li className="icons">
+                        <img src="image/shape.svg" />
                         </li>
                         <span class="tooltiptext">Triangle </span>
                     </div>
                     <div class="tooltip">
                         <li className="icons" draggable="true">
-                            <MobileScreenShareIcon />
+                        <img src="image/mobile.svg" />
                         </li>
                         <span class="tooltiptext">UE Drag</span>
                     </div>
@@ -90,7 +91,7 @@ const ToolBar = () => {
                         <li  draggable="true">
                             <FullscreenIcon />
                         </li>
-                        <span class="tooltiptext">Full Screen</span>
+                        <span class="tooltiptext">Mail</span>
                     </div>
                     <div class="tooltip">
                         <li>
