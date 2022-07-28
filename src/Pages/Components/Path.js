@@ -6,8 +6,20 @@ import carImage from '../../Assets/car.png';
 import phoneImage from '../../Assets/phone.png';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { Descriptions } from "antd";
+
+
 
 const Path = ({ map, phone }) => {
+
+    const [UEData, setUEData] = useState({
+        UEName: '',
+        Speed: "50m/h",
+        Video: '30%',
+        WebBrowsing: '40%',
+        VideoConferencing: '30%'
+    });
+    
     const [currentLatLng, setCurrentLatLng] = useState(phone.origin);
     const ue_popup = new mapboxgl.Popup();
 
@@ -85,11 +97,11 @@ const Path = ({ map, phone }) => {
         // add the line which will be modified in the animation
 
 
-
         let iconToUse = phone.mode === 'walking' ? 'phone1' : 'car1';
         let sizeToUse = phone.mode === 'walking' ? 1 : 0.07;
         // Calculate the distance in kilometers between route start/end point.
         const lineDistance = turf.length(route.features[0]);
+
 
         const arc = [];
 
@@ -344,6 +356,207 @@ const Path = ({ map, phone }) => {
         map.on('style.load', () => {
             map.addLayer(customLayer, 'waterway-label');
         });
+
+        map.on('load', () => {
+            map.addSource('customLayer', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': [
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                                'description':
+                                    `<h5><strong>Zone Name-1</strong>${UEData.UEName}</h5>
+            
+                                    <h5>Speed: ${UEData.Speed}</h5>
+                                    
+                                    <h5>Video: ${UEData.Video}</h5>
+                                    
+                                    <h5>Web Browsing: ${UEData.WebBrowsing}</h5>
+                                    
+                                    <h5>Video Conferencing: ${UEData.VideoConferencing}</h5>`
+                                    
+                            },
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-74.046063, 40.721909]
+                            }
+                        },
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                                'description':
+                                     `<h5>My name is akash<h5>`
+                            },
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-73.699612, 40.660913]
+                            }
+                        },
+                        // {
+                        //     'type': 'Feature',
+                        //     'properties': {
+                        //         'description':
+                        //              `<h5>UE Name</h5>
+                        //             <h5>Video:25%</h5>
+                        //             <h5>Speed:40%</h5>
+                        //             <h5>Web Browsing:30%</h5>`
+                        //     },
+                        //     'geometry': {
+                        //         'type': 'Point',
+                        //         'coordinates': [-77.090372, 38.881189]
+                        //     }
+                        // },
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                                'description':
+                                     `<h5><strong>Zone Name-2</strong>${UEData.UEName}</h5>
+            
+                                     <h5>Speed: ${UEData.Speed}</h5>
+                                     
+                                     <h5>Video: ${UEData.Video}</h5>
+                                     
+                                     <h5>Web Browsing: ${UEData.WebBrowsing}</h5>
+                                     
+                                     <h5>Video Conferencing: ${UEData.VideoConferencing}</h5>`
+                            },
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-73.699612, 40.660913]
+                            }
+                        },
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                                'description':
+                                     `<h5><strong>ZONE Name-3<strong></h5>
+                                    <h5>Video:25%</h5>
+                                    <h5>Speed:40%</h5>
+                                    <h5>Web Browsing:30%</h5>`
+                            },
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-77.052477, 38.943951]
+                            }
+                        },
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                                'description':
+                                     `<h5>ZONE Name-4</h5>
+                                    <h5>Video:25%</h5>
+                                    <h5>Speed:40%</h5>
+                                    <h5>Web Browsing:30%</h5>`
+                            },
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-77.043444, 38.909664]
+                            }
+                        },
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                                'description':
+                                     `<h5>ZONE Name-5</h5>
+                                    <h5>Video:25%</h5>
+                                    <h5>Speed:40%</h5>
+                                    <h5>Web Browsing:30%</h5>`
+                            },
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-77.031706, 38.914581]
+                            }
+                        },
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                                'description':
+                                     `<h5>ZONE Name-6</h5>
+                                    <h5>Video:25%</h5>
+                                    <h5>Speed:40%</h5>
+                                    <h5>Web Browsing:30%</h5>`
+                            },
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-77.020945, 38.878241]
+                            }
+                        },
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                                'description':
+                                    '<strong>Truckeroo</strong><p>Truckeroo brings dozens of food trucks, live music, and games to half and M Street SE (across from Navy Yard Metro Station) today from 11:00 a.m. to 11:00 p.m.</p>'
+                            },
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-77.007481, 38.876516]
+                            }
+                        }
+                    ]
+                }
+            });
+            // Add a layer showing the places.
+            map.addLayer({
+                'id': 'customLayer',
+                'type': 'circle',
+                'source': 'customLayer',
+                'paint': {
+                    'circle-color': '#4264fb',
+                    // 'circle-radius': {
+                    //     'base': 0.5,
+                    //     'stops': [
+                    //     [11, 2],
+                    //     [22, 360]
+                    //     ]
+                    //     },
+
+                    'circle-radius':150,
+                    
+                  
+                    "circle-opacity": 0.3,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': 'purple'
+                }
+            });
+    
+            // Create a popup, but don't add it to the map yet.
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
+    
+            map.on('mouseenter', 'customLayer', (e) => {
+                // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = 'pointer';
+
+                
+    
+                // Copy coordinates array.
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const description = e.features[0].properties.description;
+
+    
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+    
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                
+            });
+    
+            map.on('mouseleave', 'customLayer', () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+        });
+    
 
     }
     useEffect(() => {

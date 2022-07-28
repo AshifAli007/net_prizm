@@ -20,6 +20,7 @@
     "antd": "^4.21.6",
     "axios": "^0.27.2",
     "mapbox-gl": "^2.9.1",
+    "mapbox-gl-draw-circle": "^1.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
