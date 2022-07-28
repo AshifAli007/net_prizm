@@ -230,7 +230,7 @@ const Path = ({ map, phone }) => {
 
             geojson.features[0].geometry.coordinates.push(route.features[0].geometry.coordinates[counter]);
             // setCurrentLatLng(route.features[0].geometry.coordinates[counter]);
-            console.log(route.features[0].geometry.coordinates[counter]);
+            // console.log(route.features[0].geometry.coordinates[counter]);
             // }
 
             // Calculate the bearing to ensure the icon is rotated to match the route arc

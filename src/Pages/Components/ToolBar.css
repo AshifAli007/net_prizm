@@ -1,5 +1,6 @@
 .right-sidebar {
     float: right;
+    width: 2%;
     /* background:rgb(202, 200, 200); */
     background: #fff;
     top: 0px;
@@ -27,6 +28,7 @@
     display: flex;
     border-bottom: 1px dotted black;
 }
+
 
 .tooltip .tooltiptext {
     visibility: hidden;
@@ -61,4 +63,7 @@
 
 span {
     margin-top: 5px;
+}
+.fa{
+    margin-left: 0;
 }

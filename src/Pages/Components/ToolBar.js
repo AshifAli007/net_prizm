@@ -20,56 +20,57 @@ const ToolBar = () => {
                     }}
                 >
                     <div class="tooltip">
-                        <li className="icons">
-                        <img src="image/search-normal.svg" />
+    
+                        <li>
+                            <SearchIcon />
                         </li>
                         <span class="tooltiptext">Search </span>
                     </div>
                     <div class="tooltip">
-                        <li className="icons">
-                        <img src="image/search-zoom-in.svg" />
+                        <li>
+                            <AddBoxIcon />
                         </li>
                         <span class="tooltiptext">Zoom In</span>
                     </div>
                     <div class="tooltip">
-                        <li className="icons">
-                        <img src="image/search-zoom-out.svg" />
+                        <li >
+                            <i class="fa fa-search-minus" aria-hidden="true"></i>
                         </li>
                         <span class="tooltiptext">Zoom Out</span>
                     </div>
                     <div class="tooltip">
-                        <li className="icons">
-                        <img src="image/maximize.svg" />
+                        <li>
+                            <i class="fa fa-arrows-alt"></i>
                         </li>
                         <span class="tooltiptext">maximize</span>
                     </div>
                     <div class="tooltip">
-                        <li className="icons">
-                        <img src="image1/grid.svg" />
+                        <li>
+                            <i class="fa fa-th-large" aria-hidden="true"></i>
                         </li>
                         <span class="tooltiptext">Grid</span>
                     </div>
-                    {/* <div class="tooltip">
-                        <li className="icons">
+                    <div class="tooltip">
+                        <li >
                             <i class="fa fa-map-o" aria-hidden="true"></i>
                         </li>
                         <span class="tooltiptext">Map Switch</span>
-                    </div> */}
+                    </div> 
                     <div class="tooltip">
-                        <li className="icons">
-                        <img src="image1/arrow-3.svg" />
+                        <li >
+                            <i class="fa fa-arrows" aria-hidden="true"></i>
                         </li>
                         <span class="tooltiptext">Up Down</span>
                     </div>
                     <div class="tooltip">
-                        <li className="icons">
-                        <img src="image/Opacity.svg" />
+                        <li >
+                            <BrowseGalleryOutlinedIcon />
                         </li>
                         <span class="tooltiptext">Opacity </span>
                     </div>
                     <div class="tooltip">
-                        <li className="icons">
-                        <img src="image/3d-rotate.svg" />
+                        <li >
+                            <i class="fa fa-cube" aria-hidden="true"></i>
                         </li>
                         <span class="tooltiptext">Rotate</span>
                     </div>
@@ -87,14 +88,14 @@ const ToolBar = () => {
                     </div>
 
                     <div class="tooltip">
-                        <li className="icons" draggable="true">
-                        <img src="image1/mail.svg" />   
+                        <li  draggable="true">
+                            <FullscreenIcon />
                         </li>
                         <span class="tooltiptext">Mail</span>
                     </div>
                     <div class="tooltip">
-                        <li className="icons">
-                        <img src="image/help-icon.svg" />   
+                        <li>
+                            <NotListedLocationOutlinedIcon />
                         </li>
                         <span class="tooltiptext">Help</span>
                     </div>
