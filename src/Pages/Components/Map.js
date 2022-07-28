@@ -1,6 +1,8 @@
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
-import ToolBar from './ToolBar';
+
+import DragDrop from './DragDrop';
+import ToolBar from "../Components/ToolBar";
 import phones from '../../helpers/phones';
 import Path from '../Components/Path.js';
 
@@ -39,6 +41,7 @@ const Map = () => {
                     width: '100%',
                     height: '100%',
                 }}>
+                    {map && <DragDrop map={map}/>}
                     <ToolBar></ToolBar>
                 {map &&
                     phones.map((phone) => {
