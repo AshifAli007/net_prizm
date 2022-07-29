@@ -393,8 +393,8 @@ const DragDrop = ({ map }) => {
     <div>
       <div id="uebtn" >
         <Button sx={styles} variant="outlined" id="play" ><PlayArrowIcon />
-        Play Ue</Button>
-        <Button sx={styles} variant="outlined"  id="pause"><StopIcon/>Pause Ue</Button></div>
+        </Button>
+        <Button sx={styles} variant="outlined"  id="pause"><StopIcon/></Button></div>
       
     
       <Modal
