@@ -5,6 +5,7 @@ import DragDrop from './DragDrop';
 import ToolBar from "../Components/ToolBar";
 import phones from '../../helpers/phones';
 import Path from '../Components/Path.js';
+import Circle from './Circle';
 
 const Map = () => {
 
@@ -48,6 +49,7 @@ const Map = () => {
                 }}>
                     {map && <DragDrop map={map}/>}
                     <ToolBar></ToolBar>
+                    {map && <Circle map={map}/>}
                 {map &&
                     phones.map((phone) => {
                         return (
