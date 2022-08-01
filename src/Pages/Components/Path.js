@@ -278,284 +278,284 @@ const Path = ({ map, phone }) => {
             */
             scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits()
         };
-        const customLayer = {
-            id: '3d-model',
-            type: 'custom',
-            renderingMode: '3d',
-            onAdd: function (map, gl) {
-                this.camera = new THREE.Camera();
-                this.scene = new THREE.Scene();
+        // const customLayer = {
+        //     id: '3d-model',
+        //     type: 'custom',
+        //     renderingMode: '3d',
+        //     onAdd: function (map, gl) {
+        //         this.camera = new THREE.Camera();
+        //         this.scene = new THREE.Scene();
 
-                // create two three.js lights to illuminate the model
-                const directionalLight = new THREE.DirectionalLight(0xffffff);
-                directionalLight.position.set(0, -70, 100).normalize();
-                this.scene.add(directionalLight);
+        //         // create two three.js lights to illuminate the model
+        //         const directionalLight = new THREE.DirectionalLight(0xffffff);
+        //         directionalLight.position.set(0, -70, 100).normalize();
+        //         this.scene.add(directionalLight);
 
-                const directionalLight2 = new THREE.DirectionalLight(0xffffff);
-                directionalLight2.position.set(0, 70, 100).normalize();
-                this.scene.add(directionalLight2);
+        //         const directionalLight2 = new THREE.DirectionalLight(0xffffff);
+        //         directionalLight2.position.set(0, 70, 100).normalize();
+        //         this.scene.add(directionalLight2);
 
-                // use the three.js GLTF loader to add the 3D model to the three.js scene
-                const loader = new GLTFLoader();
-                loader.load(
-                    'https://docs.mapbox.com/mapbox-gl-js/assets/34M_17/34M_17.gltf',
-                    (gltf) => {
-                        this.scene.add(gltf.scene);
-                    }
-                );
-                this.map = map;
+        //         // use the three.js GLTF loader to add the 3D model to the three.js scene
+        //         const loader = new GLTFLoader();
+        //         loader.load(
+        //             'https://docs.mapbox.com/mapbox-gl-js/assets/34M_17/34M_17.gltf',
+        //             (gltf) => {
+        //                 this.scene.add(gltf.scene);
+        //             }
+        //         );
+        //         this.map = map;
 
-                // use the Mapbox GL JS map canvas for three.js
-                this.renderer = new THREE.WebGLRenderer({
-                    canvas: map.getCanvas(),
-                    context: gl,
-                    antialias: true
-                });
+        //         // use the Mapbox GL JS map canvas for three.js
+        //         this.renderer = new THREE.WebGLRenderer({
+        //             canvas: map.getCanvas(),
+        //             context: gl,
+        //             antialias: true
+        //         });
 
-                this.renderer.autoClear = false;
-            },
-            render: function (gl, matrix) {
-                const rotationX = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(1, 0, 0),
-                    modelTransform.rotateX
-                );
-                const rotationY = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(0, 1, 0),
-                    modelTransform.rotateY
-                );
-                const rotationZ = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(0, 0, 1),
-                    modelTransform.rotateZ
-                );
+        //         this.renderer.autoClear = false;
+        //     },
+        //     render: function (gl, matrix) {
+        //         const rotationX = new THREE.Matrix4().makeRotationAxis(
+        //             new THREE.Vector3(1, 0, 0),
+        //             modelTransform.rotateX
+        //         );
+        //         const rotationY = new THREE.Matrix4().makeRotationAxis(
+        //             new THREE.Vector3(0, 1, 0),
+        //             modelTransform.rotateY
+        //         );
+        //         const rotationZ = new THREE.Matrix4().makeRotationAxis(
+        //             new THREE.Vector3(0, 0, 1),
+        //             modelTransform.rotateZ
+        //         );
 
-                const m = new THREE.Matrix4().fromArray(matrix);
-                const l = new THREE.Matrix4()
-                    .makeTranslation(
-                        modelTransform.translateX,
-                        modelTransform.translateY,
-                        modelTransform.translateZ
-                    )
-                    .scale(
-                        new THREE.Vector3(
-                            modelTransform.scale,
-                            -modelTransform.scale,
-                            modelTransform.scale
-                        )
-                    )
-                    .multiply(rotationX)
-                    .multiply(rotationY)
-                    .multiply(rotationZ);
+        //         const m = new THREE.Matrix4().fromArray(matrix);
+        //         const l = new THREE.Matrix4()
+        //             .makeTranslation(
+        //                 modelTransform.translateX,
+        //                 modelTransform.translateY,
+        //                 modelTransform.translateZ
+        //             )
+        //             .scale(
+        //                 new THREE.Vector3(
+        //                     modelTransform.scale,
+        //                     -modelTransform.scale,
+        //                     modelTransform.scale
+        //                 )
+        //             )
+        //             .multiply(rotationX)
+        //             .multiply(rotationY)
+        //             .multiply(rotationZ);
 
-                this.camera.projectionMatrix = m.multiply(l);
-                this.renderer.resetState();
-                this.renderer.render(this.scene, this.camera);
-                this.map.triggerRepaint();
+        //         this.camera.projectionMatrix = m.multiply(l);
+        //         this.renderer.resetState();
+        //         this.renderer.render(this.scene, this.camera);
+        //         this.map.triggerRepaint();
 
-            }
-        };
-        map.on('style.load', () => {
-            map.addLayer(customLayer, 'waterway-label');
-        });
+        //     }
+        // };
+        // map.on('style.load', () => {
+        //     map.addLayer(customLayer, 'waterway-label');
+        // });
 
-        map.on('load', () => {
-            map.addSource('customLayer', {
-                'type': 'geojson',
-                'data': {
-                    'type': 'FeatureCollection',
-                    'features': [
-                        {
-                            'type': 'Feature',
-                            'properties': {
-                                'description':
-                                    `<h5><strong>Zone Name-1</strong>${UEData.UEName}</h5>
+        // map.on('load', () => {
+        //     map.addSource('customLayer', {
+        //         'type': 'geojson',
+        //         'data': {
+        //             'type': 'FeatureCollection',
+        //             'features': [
+        //                 {
+        //                     'type': 'Feature',
+        //                     'properties': {
+        //                         'description':
+        //                             `<h5><strong>Zone Name-1</strong>${UEData.UEName}</h5>
             
-                                    <h5>Speed: ${UEData.Speed}</h5>
+        //                             <h5>Speed: ${UEData.Speed}</h5>
                                     
-                                    <h5>Video: ${UEData.Video}</h5>
+        //                             <h5>Video: ${UEData.Video}</h5>
                                     
-                                    <h5>Web Browsing: ${UEData.WebBrowsing}</h5>
+        //                             <h5>Web Browsing: ${UEData.WebBrowsing}</h5>
                                     
-                                    <h5>Video Conferencing: ${UEData.VideoConferencing}</h5>`
+        //                             <h5>Video Conferencing: ${UEData.VideoConferencing}</h5>`
                                     
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-74.046063, 40.721909]
-                            }
-                        },
-                        {
-                            'type': 'Feature',
-                            'properties': {
-                                'description':
-                                     `<h5>My name is akash<h5>`
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-73.699612, 40.660913]
-                            }
-                        },
-                        // {
-                        //     'type': 'Feature',
-                        //     'properties': {
-                        //         'description':
-                        //              `<h5>UE Name</h5>
-                        //             <h5>Video:25%</h5>
-                        //             <h5>Speed:40%</h5>
-                        //             <h5>Web Browsing:30%</h5>`
-                        //     },
-                        //     'geometry': {
-                        //         'type': 'Point',
-                        //         'coordinates': [-77.090372, 38.881189]
-                        //     }
-                        // },
-                        {
-                            'type': 'Feature',
-                            'properties': {
-                                'description':
-                                     `<h5><strong>Zone Name-2</strong>${UEData.UEName}</h5>
+        //                     },
+        //                     'geometry': {
+        //                         'type': 'Point',
+        //                         'coordinates': [-74.046063, 40.721909]
+        //                     }
+        //                 },
+        //                 {
+        //                     'type': 'Feature',
+        //                     'properties': {
+        //                         'description':
+        //                              `<h5>My name is akash<h5>`
+        //                     },
+        //                     'geometry': {
+        //                         'type': 'Point',
+        //                         'coordinates': [-73.699612, 40.660913]
+        //                     }
+        //                 },
+        //                 // {
+        //                 //     'type': 'Feature',
+        //                 //     'properties': {
+        //                 //         'description':
+        //                 //              `<h5>UE Name</h5>
+        //                 //             <h5>Video:25%</h5>
+        //                 //             <h5>Speed:40%</h5>
+        //                 //             <h5>Web Browsing:30%</h5>`
+        //                 //     },
+        //                 //     'geometry': {
+        //                 //         'type': 'Point',
+        //                 //         'coordinates': [-77.090372, 38.881189]
+        //                 //     }
+        //                 // },
+        //                 {
+        //                     'type': 'Feature',
+        //                     'properties': {
+        //                         'description':
+        //                              `<h5><strong>Zone Name-2</strong>${UEData.UEName}</h5>
             
-                                     <h5>Speed: ${UEData.Speed}</h5>
+        //                              <h5>Speed: ${UEData.Speed}</h5>
                                      
-                                     <h5>Video: ${UEData.Video}</h5>
+        //                              <h5>Video: ${UEData.Video}</h5>
                                      
-                                     <h5>Web Browsing: ${UEData.WebBrowsing}</h5>
+        //                              <h5>Web Browsing: ${UEData.WebBrowsing}</h5>
                                      
-                                     <h5>Video Conferencing: ${UEData.VideoConferencing}</h5>`
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-73.699612, 40.660913]
-                            }
-                        },
-                        {
-                            'type': 'Feature',
-                            'properties': {
-                                'description':
-                                     `<h5><strong>ZONE Name-3<strong></h5>
-                                    <h5>Video:25%</h5>
-                                    <h5>Speed:40%</h5>
-                                    <h5>Web Browsing:30%</h5>`
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-77.052477, 38.943951]
-                            }
-                        },
-                        {
-                            'type': 'Feature',
-                            'properties': {
-                                'description':
-                                     `<h5>ZONE Name-4</h5>
-                                    <h5>Video:25%</h5>
-                                    <h5>Speed:40%</h5>
-                                    <h5>Web Browsing:30%</h5>`
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-77.043444, 38.909664]
-                            }
-                        },
-                        {
-                            'type': 'Feature',
-                            'properties': {
-                                'description':
-                                     `<h5>ZONE Name-5</h5>
-                                    <h5>Video:25%</h5>
-                                    <h5>Speed:40%</h5>
-                                    <h5>Web Browsing:30%</h5>`
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-77.031706, 38.914581]
-                            }
-                        },
-                        {
-                            'type': 'Feature',
-                            'properties': {
-                                'description':
-                                     `<h5>ZONE Name-6</h5>
-                                    <h5>Video:25%</h5>
-                                    <h5>Speed:40%</h5>
-                                    <h5>Web Browsing:30%</h5>`
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-77.020945, 38.878241]
-                            }
-                        },
-                        {
-                            'type': 'Feature',
-                            'properties': {
-                                'description':
-                                    '<strong>Truckeroo</strong><p>Truckeroo brings dozens of food trucks, live music, and games to half and M Street SE (across from Navy Yard Metro Station) today from 11:00 a.m. to 11:00 p.m.</p>'
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-77.007481, 38.876516]
-                            }
-                        }
-                    ]
-                }
-            });
-            // Add a layer showing the places.
-            map.addLayer({
-                'id': 'customLayer',
-                'type': 'circle',
-                'source': 'customLayer',
-                'paint': {
-                    'circle-color': '#4264fb',
-                    // 'circle-radius': {
-                    //     'base': 0.5,
-                    //     'stops': [
-                    //     [11, 2],
-                    //     [22, 360]
-                    //     ]
-                    //     },
+        //                              <h5>Video Conferencing: ${UEData.VideoConferencing}</h5>`
+        //                     },
+        //                     'geometry': {
+        //                         'type': 'Point',
+        //                         'coordinates': [-73.699612, 40.660913]
+        //                     }
+        //                 },
+        //                 {
+        //                     'type': 'Feature',
+        //                     'properties': {
+        //                         'description':
+        //                              `<h5><strong>ZONE Name-3<strong></h5>
+        //                             <h5>Video:25%</h5>
+        //                             <h5>Speed:40%</h5>
+        //                             <h5>Web Browsing:30%</h5>`
+        //                     },
+        //                     'geometry': {
+        //                         'type': 'Point',
+        //                         'coordinates': [-77.052477, 38.943951]
+        //                     }
+        //                 },
+        //                 {
+        //                     'type': 'Feature',
+        //                     'properties': {
+        //                         'description':
+        //                              `<h5>ZONE Name-4</h5>
+        //                             <h5>Video:25%</h5>
+        //                             <h5>Speed:40%</h5>
+        //                             <h5>Web Browsing:30%</h5>`
+        //                     },
+        //                     'geometry': {
+        //                         'type': 'Point',
+        //                         'coordinates': [-77.043444, 38.909664]
+        //                     }
+        //                 },
+        //                 {
+        //                     'type': 'Feature',
+        //                     'properties': {
+        //                         'description':
+        //                              `<h5>ZONE Name-5</h5>
+        //                             <h5>Video:25%</h5>
+        //                             <h5>Speed:40%</h5>
+        //                             <h5>Web Browsing:30%</h5>`
+        //                     },
+        //                     'geometry': {
+        //                         'type': 'Point',
+        //                         'coordinates': [-77.031706, 38.914581]
+        //                     }
+        //                 },
+        //                 {
+        //                     'type': 'Feature',
+        //                     'properties': {
+        //                         'description':
+        //                              `<h5>ZONE Name-6</h5>
+        //                             <h5>Video:25%</h5>
+        //                             <h5>Speed:40%</h5>
+        //                             <h5>Web Browsing:30%</h5>`
+        //                     },
+        //                     'geometry': {
+        //                         'type': 'Point',
+        //                         'coordinates': [-77.020945, 38.878241]
+        //                     }
+        //                 },
+        //                 {
+        //                     'type': 'Feature',
+        //                     'properties': {
+        //                         'description':
+        //                             '<strong>Truckeroo</strong><p>Truckeroo brings dozens of food trucks, live music, and games to half and M Street SE (across from Navy Yard Metro Station) today from 11:00 a.m. to 11:00 p.m.</p>'
+        //                     },
+        //                     'geometry': {
+        //                         'type': 'Point',
+        //                         'coordinates': [-77.007481, 38.876516]
+        //                     }
+        //                 }
+        //             ]
+        //         }
+        //     });
+        //     // Add a layer showing the places.
+        //     map.addLayer({
+        //         'id': 'customLayer',
+        //         'type': 'circle',
+        //         'source': 'customLayer',
+        //         'paint': {
+        //             'circle-color': '#4264fb',
+        //             // 'circle-radius': {
+        //             //     'base': 0.5,
+        //             //     'stops': [
+        //             //     [11, 2],
+        //             //     [22, 360]
+        //             //     ]
+        //             //     },
 
-                    'circle-radius':150,
+        //             'circle-radius':150,
                     
                   
-                    "circle-opacity": 0.3,
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': 'purple'
-                }
-            });
+        //             "circle-opacity": 0.3,
+        //             'circle-stroke-width': 1,
+        //             'circle-stroke-color': 'purple'
+        //         }
+        //     });
     
-            // Create a popup, but don't add it to the map yet.
-            const popup = new mapboxgl.Popup({
-                closeButton: false,
-                closeOnClick: false
-            });
+        //     // Create a popup, but don't add it to the map yet.
+        //     const popup = new mapboxgl.Popup({
+        //         closeButton: false,
+        //         closeOnClick: false
+        //     });
     
-            map.on('mouseenter', 'customLayer', (e) => {
-                // Change the cursor style as a UI indicator.
-                map.getCanvas().style.cursor = 'pointer';
+        //     map.on('mouseenter', 'customLayer', (e) => {
+        //         // Change the cursor style as a UI indicator.
+        //         map.getCanvas().style.cursor = 'pointer';
 
                 
     
-                // Copy coordinates array.
-                const coordinates = e.features[0].geometry.coordinates.slice();
-                const description = e.features[0].properties.description;
+        //         // Copy coordinates array.
+        //         const coordinates = e.features[0].geometry.coordinates.slice();
+        //         const description = e.features[0].properties.description;
 
     
-                // Ensure that if the map is zoomed out such that multiple
-                // copies of the feature are visible, the popup appears
-                // over the copy being pointed to.
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
+        //         // Ensure that if the map is zoomed out such that multiple
+        //         // copies of the feature are visible, the popup appears
+        //         // over the copy being pointed to.
+        //         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        //             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        //         }
     
-                // Populate the popup and set its coordinates
-                // based on the feature found.
-                popup.setLngLat(coordinates).setHTML(description).addTo(map);
+        //         // Populate the popup and set its coordinates
+        //         // based on the feature found.
+        //         popup.setLngLat(coordinates).setHTML(description).addTo(map);
                 
-            });
+        //     });
     
-            map.on('mouseleave', 'customLayer', () => {
-                map.getCanvas().style.cursor = '';
-                popup.remove();
-            });
-        });
+        //     map.on('mouseleave', 'customLayer', () => {
+        //         map.getCanvas().style.cursor = '';
+        //         popup.remove();
+        //     });
+        // });
     
 
     }
