@@ -3,7 +3,7 @@ import mapboxgl from "mapbox-gl";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import "../../Assets/css/dragDrop.css";
+import "../../Assets/CSS/dragDrop.css";
 import * as turf from "@turf/turf";
 import phoneImage from "../../Assets/phone.png";
 import { useState } from "react";

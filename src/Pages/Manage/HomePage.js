@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
-import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -24,10 +23,9 @@ import Map from '../Components/Map';
 import { styled, useTheme } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import GlobalVariable from '../Components/GlobalVariable';
 
-// import CssBaseline from '@mui/material/CssBaseline';
-// import Box from '@mui/material/Box';
-// import Container from '@mui/material/Container';
+
 import { Layout, Menu } from 'antd';
 import IconButton from '@mui/material/IconButton';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
@@ -69,6 +67,12 @@ const HomePage = () => {
         setMainData(!mainData);
         console.log('fgfghgh');
     }
+    function buildingView(){
+        global.mapBox.setZoom(15);
+    };
+    function loadMap(){
+        global.mapBox.setZoom(8);
+    };
 
     return (
         <>
@@ -79,9 +83,9 @@ const HomePage = () => {
                             <img src="image/logo.png" />
                             <i class="fa fa-bars" aria-hidden="true" onClick={Toggle11} id='hamber1'></i>
                             {/* <button class="buttonTest" onClick={Toggle11}>Toggle</button> */}
-                            <FontAwesomeIcon icon={faGlobe} className="map1" />
+                            <FontAwesomeIcon icon={faGlobe} className="map1" onClick={loadMap} />
                             <span className='map2'>Map</span>
-                            <FontAwesomeIcon icon={faBuilding} className="building" />
+                            <FontAwesomeIcon icon={faBuilding} className="building" onClick={buildingView} />
                             <span className='building2'>Building View</span>
                             <FontAwesomeIcon icon={faNetworkWired} className="network1" />
                             <span className='network2'>Networks</span>
