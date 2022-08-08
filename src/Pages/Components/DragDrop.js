@@ -7,15 +7,14 @@ import "../../Assets/CSS/dragDrop.css";
 import * as turf from "@turf/turf";
 import phoneImage from "../../Assets/phone.png";
 import { useState } from "react";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import StopIcon from '@mui/icons-material/Stop';
-import Button from '@mui/material/Button';
-import { Color } from "three";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import StopIcon from "@mui/icons-material/Stop";
+import Button from "@mui/material/Button";
 
 const DragDrop = ({ map }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const [mobileActive, setMobileActive] = useState(false);
+
   const handleClose = () => setOpen(false);
 
   const [mobileIcon, setMobileIcon] = useState();
@@ -23,14 +22,13 @@ const DragDrop = ({ map }) => {
   const [ueData, setUeData] = useState();
   const [originPath, setOriginPath] = useState([-74.19977, 40.000069]);
   const [destination, setDestination] = useState("");
+  const [mobileActive, setMobileActive] = useState(false);
   const [ueSpeed, setUeSpeed] = useState();
 
-  const [isUeStopped, setIsUeStopped] = useState(false);
   const mode = "cycling";
   const ue_popup = new mapboxgl.Popup();
-  const playButton = document.getElementById('play');
-  const pauseButton = document.getElementById('pause');
- 
+  const playButton = document.getElementById("play");
+  const pauseButton = document.getElementById("pause");
 
   useEffect(() => {
     document.addEventListener("dragend", function (event) {
@@ -47,7 +45,7 @@ const DragDrop = ({ map }) => {
 
         if (originPath || destination || mobileActive) {
           setOriginPath([-74.19977, 40.000069]);
-          // setDestination("");
+          setDestination("");
           setMobileActive(false);
         }
         setMobileIcon(mobile);
@@ -68,10 +66,10 @@ const DragDrop = ({ map }) => {
   };
 
   const styles = {
-    color:"black",
-    border:"1px solid black",
-    backgroundColor: "white"
-  }
+    color: "black",
+    border: "1px solid black",
+    backgroundColor: "white",
+  };
 
   mobileIcon && mobileIcon.getElement().addEventListener("click", handleOpen);
   mobileIcon &&
@@ -80,10 +78,8 @@ const DragDrop = ({ map }) => {
       mobileActive
         ? setOriginPath([ueData.destinationPath[0], ueData.destinationPath[1]])
         : setOriginPath([originLngLat.lng, originLngLat.lat]);
-      mobileActive && setDestination([originLngLat.lng, originLngLat.lat]);
     });
 
-  
   useEffect(() => {
     const desMarker = new mapboxgl.Marker({
       color: "black",
@@ -92,27 +88,13 @@ const DragDrop = ({ map }) => {
     setDMarker(desMarker);
   }, [mobileIcon]);
 
-
-  // function hideUe() {
-  //   var x = document.getElementById("mobileIcon");
-    
-  //     x.style.display = "none";
-    
-  // }
-
-
-  // function hidebt() {
-   
-    
-  // }
-
   // store in local storage
   const OnDragTrajectory = () => {
     let destinationLngFloat = parseFloat(destination[0]);
     let destinationLatFloat = parseFloat(destination[1]);
     const destinationPath = [destinationLngFloat, destinationLatFloat];
     let Id = Math.random();
-    let dataEntries = { originPath, destinationPath, Id, mode,ueSpeed };
+    let dataEntries = { originPath, destinationPath, Id, mode, ueSpeed };
     setUeData(dataEntries);
     var array = JSON.parse(localStorage.getItem("ueData") || "[]");
     array.push(dataEntries);
@@ -125,17 +107,13 @@ const DragDrop = ({ map }) => {
         .setLngLat(dataEntries.originPath)
         .addTo(map);
     dMarker.setLngLat(dataEntries.destinationPath).addTo(map);
-    
+
     getRoute(dataEntries);
     setMobileActive(true);
   };
 
-  
-
-  
-
   async function getRoute(trackData) {
-    const { mode, destinationPath, originPath, Id,ueSpeed } = trackData;
+    const { mode, destinationPath, originPath, Id, ueSpeed } = trackData;
     const query = await fetch(
       `https://api.mapbox.com/directions/v5/mapbox/${mode}/${originPath[0]},${originPath[1]};${destinationPath[0]},${destinationPath[1]}?steps=true&geometries=geojson&access_token=${process.env.REACT_APP_BOX_API_KEY}`,
       { method: "GET" }
@@ -166,16 +144,15 @@ const DragDrop = ({ map }) => {
       features: [
         {
           type: "Feature",
-          'properties': {
-            'description':
-                `<strong>UE Details</strong><br/>
+          properties: {
+            description: `<strong>UE Details</strong><br/>
                 UE ID: ${trackId}<br />
                 Mode: ${mode}<br />
                 Speed: ${ueSpeed}<br />
                 Origin: ${originPath}<br />
                 Destination: ${destination}<br />
-                `,     
-        },
+                `,
+          },
           geometry: {
             type: "Point",
             coordinates: originPath,
@@ -259,34 +236,17 @@ const DragDrop = ({ map }) => {
       },
     });
 
-    map.on('click', `point${trackId}`, (e) => {
+    map.on("click", `point${trackId}`, (e) => {
       // Copy coordinates array.
       const coordinates = e.features[0].geometry.coordinates.slice();
-      const description = e.features[0].properties.currentLatLng;
+      const description = e.features[0].properties.description;
+      ue_popup.setLngLat(coordinates).setHTML(description).addTo(map);
+    });
 
-      // Ensure that if the map is zoomed out such that multiple
-      // copies of the feature are visible, the popup appears
-      // over the copy being pointed to.
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
-      
-      ue_popup
-          .setLngLat(coordinates)
-          .setHTML(description)
-          .addTo(map);
-  });
-
- 
-    
     dMarker.setDraggable(false);
 
-    let animation ;
-
-
-   
-
-
+    let animation;
+    //
     function animate() {
       const start =
         route.features[0].geometry.coordinates[
@@ -311,9 +271,6 @@ const DragDrop = ({ map }) => {
         dMarker.setDraggable(true);
       }
 
-    
-     
-
       // Calculate the bearing to ensure the icon is rotated to match the route arc
       // The bearing is calculated between the current point and the next point, except
       // at the end of the arc, which uses the previous point and the current point
@@ -322,81 +279,50 @@ const DragDrop = ({ map }) => {
         turf.point(end)
       );
 
-      ue_popup.setHTML(point.features[0].properties.description);
-            
       // Update the source with this new data
       map.getSource(`point${trackId}`).setData(point);
 
       // Request the next frame of animation as long as the end has not been reached
       if (counter < steps) {
         animation = requestAnimationFrame(animate);
-        // console.log(animation,'animationnnnnnnnnnnn');
       }
 
       counter = counter + 1;
     }
 
-    // animate(counter);
-
-
-    playButton.addEventListener('click', () => {
-      playButton.classList.toggle('play');
-      if (playButton.classList.contains('play')) {
-        // console.log('playyyyyyyyyyyyy');
-        animate(counter);
-      
-      }
+    playButton.addEventListener("click", () => {
+      animate(counter);
+      document.getElementById("play").disabled = true;
     });
-    pauseButton.addEventListener('click', () => {
-      pauseButton.classList.toggle('pause');
-      if(pauseButton.classList.contains('pause')){
-        // console.log('pauseeeeeeeeeeeeeeeee');
-        cancelAnimationFrame(animation);
-        
-        }
+    pauseButton.addEventListener("click", () => {
+      cancelAnimationFrame(animation);
+      document.getElementById("play").removeAttribute("disabled");
     });
-   
-
-
-  
-
-
-      
-      
-
-
-
-
-   
 
     dMarker.on("dragend", () => {
-
       handleOpen();
-   
+      document.getElementById("play").removeAttribute("disabled");
 
-      if(map.getLayer(`point${trackId}`)){
+      if (map.getLayer(`point${trackId}`)) {
         map.removeLayer(`point${trackId}`);
       }
       const markerCurrentLngLat = dMarker.getLngLat();
-
+      setOriginPath(destination);
       setDestination([markerCurrentLngLat.lng, markerCurrentLngLat.lat]);
     });
-
-
-
-   
-    
   }
 
-  
   return (
     <div>
-      <div id="uebtn" >
-        <Button sx={styles} variant="outlined" id="play" ><PlayArrowIcon />
+      <div id="uebtn">
+        <Button sx={styles} variant="outlined" id="play">
+          <PlayArrowIcon />
         </Button>
-        <Button sx={styles} variant="outlined"  id="pause"><StopIcon/></Button></div>
-      
-    
+        <Button sx={styles} variant="outlined" id="pause">
+          <StopIcon />
+        </Button>
+      </div>
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -421,18 +347,21 @@ const DragDrop = ({ map }) => {
             />
           </Typography>
           <Typography sx={{ mt: 2 }}>
-            <input type="number" placeholder="Enter Ue Speed" onChange={(e) => {
-                setUeSpeed(e.target.value)}}/>
+            <input
+              type="number"
+              placeholder="Enter Ue Speed"
+              onChange={(e) => {
+                setUeSpeed(e.target.value);
+              }}
+            />
           </Typography>
           <Typography sx={{ mt: 2 }}>
             <button
               onClick={() => {
                 OnDragTrajectory();
                 mobileIcon.remove();
-                handleClose();
-                setDestination("Enter Ue Destination ");
-                setOriginPath(destination);
-
+                handleClose();  
+                document.getElementById("play").removeAttribute("disabled");
               }}
             >
               Draw Path
@@ -440,8 +369,6 @@ const DragDrop = ({ map }) => {
           </Typography>
         </Box>
       </Modal>
-      
-      
     </div>
   );
 };

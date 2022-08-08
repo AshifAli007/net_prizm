@@ -5,7 +5,7 @@ import DragDrop from './DragDrop';
 import ToolBar from "../Components/ToolBar";
 import phones from '../../helpers/phones';
 import Path from '../Components/Path.js';
-import Circle from './Circle';
+import Circle from './Circle.js';
 
 const Map = () => {
 
@@ -38,6 +38,11 @@ const Map = () => {
 
         });
     }, [])
+
+    useEffect(()=>{
+        localStorage.setItem("ueData", JSON.stringify(phones));
+
+    },[]);
 
     return (
         <>
