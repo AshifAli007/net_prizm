@@ -30,15 +30,7 @@ const data = [
         id: '4',
         speed: 40,
         mode: 'driving',
-    },
-    {
-        origin: [-75.698421,45.574960],
-        destination: [-74.397257, 41.118245],
-        name: 'UE5',
-        id: '5',
-        speed: 40,
-        mode: 'Walking',
-    },
+    }
 ];
 
 export default data;
