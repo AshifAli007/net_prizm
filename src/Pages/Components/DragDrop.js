@@ -3,7 +3,7 @@ import mapboxgl from "mapbox-gl";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import "../../Assets/css/dragDrop.css";
+import "../../Assets/CSS/dragDrop.css";
 import * as turf from "@turf/turf";
 import phoneImage from "../../Assets/phone.png";
 import { useState } from "react";
@@ -393,8 +393,8 @@ const DragDrop = ({ map }) => {
     <div>
       <div id="uebtn" >
         <Button sx={styles} variant="outlined" id="play" ><PlayArrowIcon />
-        Play Ue</Button>
-        <Button sx={styles} variant="outlined"  id="pause"><StopIcon/>Pause Ue</Button></div>
+        </Button>
+        <Button sx={styles} variant="outlined"  id="pause"><StopIcon/></Button></div>
       
     
       <Modal

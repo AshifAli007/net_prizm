@@ -282,84 +282,84 @@ const Path = ({ map, phone }) => {
             */
             scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits()
         };
-        const customLayer = {
-            id: '3d-model',
-            type: 'custom',
-            renderingMode: '3d',
-            onAdd: function (map, gl) {
-                this.camera = new THREE.Camera();
-                this.scene = new THREE.Scene();
+        // const customLayer = {
+        //     id: '3d-model',
+        //     type: 'custom',
+        //     renderingMode: '3d',
+        //     onAdd: function (map, gl) {
+        //         this.camera = new THREE.Camera();
+        //         this.scene = new THREE.Scene();
 
-                // create two three.js lights to illuminate the model
-                const directionalLight = new THREE.DirectionalLight(0xffffff);
-                directionalLight.position.set(0, -70, 100).normalize();
-                this.scene.add(directionalLight);
+        //         // create two three.js lights to illuminate the model
+        //         const directionalLight = new THREE.DirectionalLight(0xffffff);
+        //         directionalLight.position.set(0, -70, 100).normalize();
+        //         this.scene.add(directionalLight);
 
-                const directionalLight2 = new THREE.DirectionalLight(0xffffff);
-                directionalLight2.position.set(0, 70, 100).normalize();
-                this.scene.add(directionalLight2);
+        //         const directionalLight2 = new THREE.DirectionalLight(0xffffff);
+        //         directionalLight2.position.set(0, 70, 100).normalize();
+        //         this.scene.add(directionalLight2);
 
-                // use the three.js GLTF loader to add the 3D model to the three.js scene
-                const loader = new GLTFLoader();
-                loader.load(
-                    'https://docs.mapbox.com/mapbox-gl-js/assets/34M_17/34M_17.gltf',
-                    (gltf) => {
-                        this.scene.add(gltf.scene);
-                    }
-                );
-                this.map = map;
+        //         // use the three.js GLTF loader to add the 3D model to the three.js scene
+        //         const loader = new GLTFLoader();
+        //         loader.load(
+        //             'https://docs.mapbox.com/mapbox-gl-js/assets/34M_17/34M_17.gltf',
+        //             (gltf) => {
+        //                 this.scene.add(gltf.scene);
+        //             }
+        //         );
+        //         this.map = map;
 
-                // use the Mapbox GL JS map canvas for three.js
-                this.renderer = new THREE.WebGLRenderer({
-                    canvas: map.getCanvas(),
-                    context: gl,
-                    antialias: true
-                });
+        //         // use the Mapbox GL JS map canvas for three.js
+        //         this.renderer = new THREE.WebGLRenderer({
+        //             canvas: map.getCanvas(),
+        //             context: gl,
+        //             antialias: true
+        //         });
 
-                this.renderer.autoClear = false;
-            },
-            render: function (gl, matrix) {
-                const rotationX = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(1, 0, 0),
-                    modelTransform.rotateX
-                );
-                const rotationY = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(0, 1, 0),
-                    modelTransform.rotateY
-                );
-                const rotationZ = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(0, 0, 1),
-                    modelTransform.rotateZ
-                );
+        //         this.renderer.autoClear = false;
+        //     },
+        //     render: function (gl, matrix) {
+        //         const rotationX = new THREE.Matrix4().makeRotationAxis(
+        //             new THREE.Vector3(1, 0, 0),
+        //             modelTransform.rotateX
+        //         );
+        //         const rotationY = new THREE.Matrix4().makeRotationAxis(
+        //             new THREE.Vector3(0, 1, 0),
+        //             modelTransform.rotateY
+        //         );
+        //         const rotationZ = new THREE.Matrix4().makeRotationAxis(
+        //             new THREE.Vector3(0, 0, 1),
+        //             modelTransform.rotateZ
+        //         );
 
-                const m = new THREE.Matrix4().fromArray(matrix);
-                const l = new THREE.Matrix4()
-                    .makeTranslation(
-                        modelTransform.translateX,
-                        modelTransform.translateY,
-                        modelTransform.translateZ
-                    )
-                    .scale(
-                        new THREE.Vector3(
-                            modelTransform.scale,
-                            -modelTransform.scale,
-                            modelTransform.scale
-                        )
-                    )
-                    .multiply(rotationX)
-                    .multiply(rotationY)
-                    .multiply(rotationZ);
+        //         const m = new THREE.Matrix4().fromArray(matrix);
+        //         const l = new THREE.Matrix4()
+        //             .makeTranslation(
+        //                 modelTransform.translateX,
+        //                 modelTransform.translateY,
+        //                 modelTransform.translateZ
+        //             )
+        //             .scale(
+        //                 new THREE.Vector3(
+        //                     modelTransform.scale,
+        //                     -modelTransform.scale,
+        //                     modelTransform.scale
+        //                 )
+        //             )
+        //             .multiply(rotationX)
+        //             .multiply(rotationY)
+        //             .multiply(rotationZ);
 
-                this.camera.projectionMatrix = m.multiply(l);
-                this.renderer.resetState();
-                this.renderer.render(this.scene, this.camera);
-                this.map.triggerRepaint();
+        //         this.camera.projectionMatrix = m.multiply(l);
+        //         this.renderer.resetState();
+        //         this.renderer.render(this.scene, this.camera);
+        //         this.map.triggerRepaint();
 
-            }
-        };
-        map.on('style.load', () => {
-            map.addLayer(customLayer, 'waterway-label');
-        });
+        //     }
+        // };
+        // map.on('style.load', () => {
+        //     map.addLayer(customLayer, 'waterway-label');
+        // });
 
         // map.on('load', () => {
         //     map.addSource('customLayer', {
@@ -398,20 +398,20 @@ const Path = ({ map, phone }) => {
         //                         'coordinates': [-73.699612, 40.660913]
         //                     }
         //                 },
-                        // {
-                        //     'type': 'Feature',
-                        //     'properties': {
-                        //         'description':
-                        //              `<h5>UE Name</h5>
-                        //             <h5>Video:25%</h5>
-                        //             <h5>Speed:40%</h5>
-                        //             <h5>Web Browsing:30%</h5>`
-                        //     },
-                        //     'geometry': {
-                        //         'type': 'Point',
-                        //         'coordinates': [-77.090372, 38.881189]
-                        //     }
-                        // },
+        //                 // {
+        //                 //     'type': 'Feature',
+        //                 //     'properties': {
+        //                 //         'description':
+        //                 //              `<h5>UE Name</h5>
+        //                 //             <h5>Video:25%</h5>
+        //                 //             <h5>Speed:40%</h5>
+        //                 //             <h5>Web Browsing:30%</h5>`
+        //                 //     },
+        //                 //     'geometry': {
+        //                 //         'type': 'Point',
+        //                 //         'coordinates': [-77.090372, 38.881189]
+        //                 //     }
+        //                 // },
         //                 {
         //                     'type': 'Feature',
         //                     'properties': {

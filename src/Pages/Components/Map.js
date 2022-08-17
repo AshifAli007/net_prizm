@@ -1,6 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
-// import GlobalVariable from './GlobalVariable';
+import GlobalVariable from './GlobalVariable';
 import DragDrop from './DragDrop';
 import ToolBar from "../Components/ToolBar";
 import phones from '../../helpers/phones';

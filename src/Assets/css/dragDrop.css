@@ -1,6 +1,6 @@
 
 #mobileIcon{
-/* background-image: url('C:\Net_Prizm\net_prizm\src\Assets\phone.png'); */
+background-image: url('/public/image/phone.png');
 width: 50px;
 height: 50px;
 cursor: pointer;
