@@ -5,8 +5,9 @@ import DragDrop from './DragDrop';
 import ToolBar from "../Components/ToolBar";
 import phones from '../../helpers/phones';
 import Path from '../Components/Path.js';
-import Circle from './Circle';
+// import Circle from './Circle';
 import Circle1 from './Circle1';
+import MapLayer from './MapLayer';
 
 const Map = () => {
 //    function zoomLevel(){}
@@ -63,9 +64,11 @@ const Map = () => {
                 }}>
                     {map && <DragDrop map={map}/>}
                     <ToolBar></ToolBar>
-                    {map && <Circle map={map}/>}
+                    {/* {map && <Circle map={map}/>} */}
                     {map && <Circle1 map={map}/>}
-                    
+                    {map && <MapLayer map={map}/>}
+                  
+                        
                 {map &&
                     phones.map((phone) => {
                         return (
